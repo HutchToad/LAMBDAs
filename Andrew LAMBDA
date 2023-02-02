@@ -1,0 +1,11 @@
+REMOVEOUTLIERS=LET(
+    stdev, STDEV.S(rng),
+    avg, AVERAGE(rng),
+    lcl, avg - standardDeviations * stdev,
+    ucl, avg + standardDeviations * stdev,
+    IF(
+        OR(lcl > MIN(rng), ucl < MAX(rng)),
+        REMOVEOUTLIERS(IF((rng > lcl) * (rng < ucl), rng, "NM"), standardDeviations),
+        rng
+    )
+)
